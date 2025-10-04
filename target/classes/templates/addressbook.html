@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="'Address Book - ' + ${addressBook.owner}">Address Book</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem; }
+        h1 { margin-bottom: .5rem; }
+        .meta { color: #666; margin-bottom: 1rem; }
+        table { border-collapse: collapse; width: 420px; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background: #f5f5f5; text-align: left; }
+    </style>
+</head>
+<body>
+<h1 th:text="${addressBook.owner}">Owner</h1>
+<div class="meta">
+    ID: <span th:text="${addressBook.id}">1</span> •
+    Buddies: <span th:text="${#lists.size(addressBook.buddies)}">0</span>
+</div>
+
+<table>
+    <thead><tr><th>Name</th><th>Phone</th></tr></thead>
+    <tbody>
+    <tr th:each="b : ${addressBook.buddies}">
+        <td th:text="${b.name}">Name</td>
+        <td th:text="${b.phone}">Phone</td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(addressBook.buddies)}">
+        <td colspan="2"><em>No buddies yet.</em></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
