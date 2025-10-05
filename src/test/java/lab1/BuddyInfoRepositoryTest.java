@@ -3,13 +3,24 @@ package lab1;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
+@DataJpaTest(properties = {
+        "spring.jpa.hibernate.ddl-auto=create-drop" // clean schema for tests
+})
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY) // force embedded H2
+@TestPropertySource(properties = {
+        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
+        "spring.datasource.driverClassName=org.h2.Driver",
+        "spring.datasource.username=sa",
+        "spring.datasource.password="
+})
 class BuddyInfoRepositoryTest {
 
     @Autowired
@@ -27,7 +38,7 @@ class BuddyInfoRepositoryTest {
         assertThat(saved.getId()).isNotNull();
         assertThat(saved.getAddress()).isEqualTo("N/A");
 
-        Iterable<BuddyInfo> results = buddyRepo.findByName("John", "123 crossroads");
+        Iterable<BuddyInfo> results = buddyRepo.findByName("John");
         assertThat(results).extracting(BuddyInfo::getPhone).contains("123");
         assertThat(results).extracting(BuddyInfo::getAddress).contains("N/A");
     }
@@ -42,7 +53,7 @@ class BuddyInfoRepositoryTest {
         buddyRepo.save(b);
 
         // Verify link & address via fresh load
-        List<BuddyInfo> marys = (List<BuddyInfo>) buddyRepo.findByName("Mary", "123 crossroads");
+        List<BuddyInfo> marys = (List<BuddyInfo>) buddyRepo.findByName("Mary");
         assertThat(marys).hasSize(1);
         BuddyInfo loaded = marys.get(0);
         assertThat(loaded.getAddressBook()).isNotNull();
@@ -83,7 +94,7 @@ class BuddyInfoRepositoryTest {
         ab.removeBuddy(b);
         addressBookRepo.save(ab);
 
-        assertThat(buddyRepo.findByName("Orphan", "123 crossroads")).isEmpty();
+        assertThat(buddyRepo.findByName("Orphan")).isEmpty();
     }
 
     @Test
@@ -91,6 +102,6 @@ class BuddyInfoRepositoryTest {
     void delete_buddy_directly() {
         BuddyInfo b = buddyRepo.save(new BuddyInfo("Zed", "999", "Z St"));
         buddyRepo.delete(b);
-        assertThat(buddyRepo.findByName("Zed", "123 crossroads")).isEmpty();
+        assertThat(buddyRepo.findByName("Zed")).isEmpty();
     }
 }

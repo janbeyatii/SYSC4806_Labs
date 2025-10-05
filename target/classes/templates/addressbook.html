@@ -25,6 +25,8 @@
     <tr th:each="b : ${addressBook.buddies}">
         <td th:text="${b.name}">Name</td>
         <td th:text="${b.phone}">Phone</td>
+        <td th:text="${b.address}">Address</td>
+
     </tr>
     <tr th:if="${#lists.isEmpty(addressBook.buddies)}">
         <td colspan="2"><em>No buddies yet.</em></td>

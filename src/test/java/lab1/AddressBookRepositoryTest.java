@@ -3,13 +3,24 @@ package lab1;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
+@DataJpaTest(properties = {
+        "spring.jpa.hibernate.ddl-auto=create-drop" // clean schema for tests
+})
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY) // force embedded H2
+@TestPropertySource(properties = {
+        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
+        "spring.datasource.driverClassName=org.h2.Driver",
+        "spring.datasource.username=sa",
+        "spring.datasource.password="
+})
 class AddressBookRepositoryTest {
 
     @Autowired
@@ -52,7 +63,7 @@ class AddressBookRepositoryTest {
         ab = addressBookRepository.save(ab);
 
         // the buddy should be gone from the repository too (orphanRemoval)
-        Iterable<BuddyInfo> johns = buddyInfoRepository.findByName("John", "123 crossroads");
+        Iterable<BuddyInfo> johns = buddyInfoRepository.findByName("John");
         assertThat(johns).isEmpty();
     }
 
