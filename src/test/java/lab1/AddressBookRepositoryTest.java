@@ -22,8 +22,8 @@ class AddressBookRepositoryTest {
     @DisplayName("save(AddressBook) cascades to buddies; findByOwner works")
     void save_cascades_and_findByOwner_works() {
         AddressBook ab = new AddressBook("Usman");
-        BuddyInfo b1 = new BuddyInfo("John", "123");
-        BuddyInfo b2 = new BuddyInfo("Mary", "456");
+        BuddyInfo b1 = new BuddyInfo("John", "123", "123 crossroads");
+        BuddyInfo b2 = new BuddyInfo("Mary", "456", "123 crossroads");
         ab.addBuddy(b1);
         ab.addBuddy(b2);
 
@@ -43,7 +43,7 @@ class AddressBookRepositoryTest {
     @DisplayName("orphanRemoval removes detached BuddyInfo rows on flush/save")
     void orphanRemoval_removes_buddies() {
         AddressBook ab = new AddressBook("Owner");
-        BuddyInfo b = new BuddyInfo("John", "123");
+        BuddyInfo b = new BuddyInfo("John", "123", "123 crossroads");
         ab.addBuddy(b);
         ab = addressBookRepository.save(ab);
 
@@ -52,7 +52,7 @@ class AddressBookRepositoryTest {
         ab = addressBookRepository.save(ab);
 
         // the buddy should be gone from the repository too (orphanRemoval)
-        Iterable<BuddyInfo> johns = buddyInfoRepository.findByName("John");
+        Iterable<BuddyInfo> johns = buddyInfoRepository.findByName("John", "123 crossroads");
         assertThat(johns).isEmpty();
     }
 

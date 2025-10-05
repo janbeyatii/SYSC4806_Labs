@@ -18,6 +18,9 @@ public class BuddyInfo {
     @Column(nullable = false)
     private String phone;
 
+    @Column(nullable = false)
+    private String address; // NEW
+
     /**
      * Many buddies belong to one address book.
      * LAZY fetch to avoid loading the parent unless needed.
@@ -30,9 +33,18 @@ public class BuddyInfo {
     /** JPA requires a no-arg constructor; protected is safer. */
     protected BuddyInfo() {}
 
+    /** Backwards-compatible: defaults address so existing calls still work. */
     public BuddyInfo(String name, String phone) {
         setName(name);
         setPhone(phone);
+        setAddress("N/A");
+    }
+
+    /** Preferred constructor including the new address field. */
+    public BuddyInfo(String name, String phone, String address) {
+        setName(name);
+        setPhone(phone);
+        setAddress(address);
     }
 
     public Long getId() { return id; }
@@ -53,12 +65,24 @@ public class BuddyInfo {
         this.phone = phone;
     }
 
+    public String getAddress() { return address; }
+    public void setAddress(String address) {
+        if (address == null || address.isBlank()) {
+            throw new IllegalArgumentException("address cannot be null/blank");
+        }
+        this.address = address;
+    }
+
     public AddressBook getAddressBook() { return addressBook; }
     public void setAddressBook(AddressBook ab) { this.addressBook = ab; }
 
     @Override
     public String toString() {
-        return "BuddyInfo{id=" + id + ", name='" + name + "', phone='" + phone + "'}";
+        return "BuddyInfo{id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                '}';
     }
 
     /** Optional: define equality by id once assigned. */

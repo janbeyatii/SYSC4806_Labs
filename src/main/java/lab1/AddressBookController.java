@@ -17,7 +17,7 @@ public class AddressBookController {
         this.buddyRepo = buddyRepo;
     }
 
-    // Create an address book: { "owner": "Usman" }
+    // Create an address book
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AddressBook create(@RequestBody AddressBook ab) {
@@ -59,7 +59,7 @@ public class AddressBookController {
         abRepo.save(book);
     }
 
-    // Optional convenience: delete an entire address book
+    // delete an entire address book
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBook(@PathVariable Long id) {

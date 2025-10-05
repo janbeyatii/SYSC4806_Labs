@@ -91,11 +91,11 @@ class AddressBookControllerTest {
         setId(ab, 1L);
         when(abRepo.findById(1L)).thenReturn(Optional.of(ab));
 
-        BuddyInfo req = new BuddyInfo("John", "123");
+        BuddyInfo req = new BuddyInfo("John", "123", "123 crossroads");
         AddressBook saved = new AddressBook("Owner");
         setId(saved, 1L);
         // after save, it should contain the buddy
-        saved.addBuddy(cloneWithId(new BuddyInfo("John", "123"), 10L));
+        saved.addBuddy(cloneWithId(new BuddyInfo("John", "123", "123 crossroads"), 10L));
 
         ArgumentCaptor<AddressBook> abCaptor = ArgumentCaptor.forClass(AddressBook.class);
         when(abRepo.save(abCaptor.capture())).thenReturn(saved);

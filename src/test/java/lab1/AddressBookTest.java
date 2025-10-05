@@ -23,7 +23,7 @@ class AddressBookTest {
     @Test
     void addBuddy_adds_and_links_both_sides() {
         AddressBook ab = new AddressBook("Alice");
-        BuddyInfo b = new BuddyInfo("John", "123");
+        BuddyInfo b = new BuddyInfo("John", "123", "123 crossroads");
 
         ab.addBuddy(b);
 
@@ -35,7 +35,7 @@ class AddressBookTest {
     @Test
     void addBuddy_ignores_duplicates_by_identity() {
         AddressBook ab = new AddressBook("Alice");
-        BuddyInfo b = new BuddyInfo("John", "123");
+        BuddyInfo b = new BuddyInfo("John", "123", "123 crossroads");
 
         ab.addBuddy(b);
         ab.addBuddy(b); // same instance again
@@ -46,7 +46,7 @@ class AddressBookTest {
     @Test
     void removeBuddy_unlinks_both_sides() {
         AddressBook ab = new AddressBook("Alice");
-        BuddyInfo b = new BuddyInfo("John", "123");
+        BuddyInfo b = new BuddyInfo("John", "123", "123 crossroads");
         ab.addBuddy(b);
 
         ab.removeBuddy(b);
