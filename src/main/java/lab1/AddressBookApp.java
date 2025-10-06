@@ -9,8 +9,8 @@
     //User Name: sa
     //Password: (leave blank)
 
-    // http://localhost:8080/addressbooks/1/view (GUI)
-
+    //GUI
+    // https://4806addressbook-ahe8ffesd8c3haey.northcentralus-01.azurewebsites.net/addressbooks/1/view
     @SpringBootApplication
     public class AddressBookApp {
         public static void main(String[] args) {
